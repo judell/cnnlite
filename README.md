@@ -8,7 +8,7 @@
 
 1. In the top-right corner, enable "Developer mode" by toggling the switch.
 
-Click on the "Load unpacked" button that appears.
+1. Click on the "Load unpacked" button that appears.
 
 1. Navigate to the folder containing your extension files (manifest.json, content.js, background.js) and select it.
 
