@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "CNN Lite Image Injector",
+  "version": "1.0",
+  "description": "Injects images from full CNN articles into lite.cnn.com pages",
+  "permissions": [
+    "https://lite.cnn.com/*",
+    "https://www.cnn.com/*",
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://lite.cnn.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
+
