@@ -24,19 +24,24 @@ The extension should now appear in your list of installed extensions. You may ne
 
 ```mermaid
 sequenceDiagram
-    participant content.js
-    participant lite.cnn article
-    participant service worker
-    participant cnn.com
+    participant User
+    participant LitePage as lite.cnn.com
+    participant ContentScript as content.js
+    participant BackgroundScript as background.js
+    participant FullPage as www.cnn.com
 
-    content.js ->> lite.cnn article: dom: find full article url
-    lite.cnn article -->> content.js: dom: full article url
-    content.js ->> service worker: js message: full article url
-    service worker ->> cnn.com: http request: fetch article
-    cnn.com -->> service worker: http response: article html
-    service worker -->> content.js: js message: article html
-    content.js->>content.js: parse html for image urls
-    content.js ->> lite.cnn article: dom: inject image urls
+    User->>LitePage: Open CNN Lite article
+    LitePage->>ContentScript: Load content.js
+    ContentScript->>LitePage: Check for lite article content (dom internal)
+    alt Article not yet loaded
+        ContentScript->>LitePage: Observe page for article load (dom internal)
+    end
+    ContentScript->>ContentScript: Extract full CNN URL (dom internal)
+    ContentScript->>BackgroundScript: Send "fetchHTML" request with full URL (js message passing)
+    BackgroundScript->>FullPage: Fetch full article HTML (http request)
+    FullPage-->>BackgroundScript: Return full article HTML (http response)
+    BackgroundScript-->>ContentScript: Send full article HTML (js message passing)
+    ContentScript->>ContentScript: Parse HTML for image URLs (dom internal)
+    ContentScript->>LitePage: Inject images into lite article (dom internal)
 
 ```
-
