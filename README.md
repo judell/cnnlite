@@ -35,6 +35,7 @@ sequenceDiagram
     service worker ->> cnn.com: http request: fetch article
     cnn.com -->> service worker: http response: article html
     service worker -->> content.js: js message: article html
+    content.js->>content.js: parse html for image urls
     content.js ->> lite.cnn article: dom: inject image urls
 
 ```
