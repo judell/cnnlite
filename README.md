@@ -27,7 +27,7 @@ sequenceDiagram
     participant User
     participant LitePage as lite.cnn.com
     participant ContentScript as content.js
-    participant BackgroundScript as background.js
+    participant BackgroundScript as background.js (service worker)
     participant FullPage as www.cnn.com
 
     User->>LitePage: Open CNN Lite article
