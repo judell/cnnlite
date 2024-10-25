@@ -29,11 +29,13 @@ sequenceDiagram
     participant service worker
     participant cnn.com
 
-    content.js ->> lite.cnn article: dom access: find full article url
+    content.js ->> lite.cnn article: dom: find full article url
+    lite.cnn article -->> content.js: dom: full article url
     content.js ->> service worker: js message: full article url
     service worker ->> cnn.com: http request: fetch article
     cnn.com -->> service worker: http response: article html
     service worker -->> content.js: js message: article html
-    content.js ->> lite.cnn article: dom access: inject image urls
+    content.js ->> lite.cnn article: domd: inject image urls
+
 ```
 
