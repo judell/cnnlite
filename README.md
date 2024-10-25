@@ -19,3 +19,21 @@ The extension should now appear in your list of installed extensions. You may ne
 ## Result
 
 ![image](https://github.com/user-attachments/assets/dd9db835-264b-4a28-9303-26cda36b878c)
+
+## Architecture
+
+```mermaid
+sequenceDiagram
+    participant content.js
+    participant lite.cnn article
+    participant service worker
+    participant cnn.com
+
+    content.js ->> lite.cnn article: dom access: find full article url
+    content.js ->> service worker: js message: full article url
+    service worker ->> cnn.com: http request: fetch article
+    cnn.com -->> service worker: http response: article html
+    service worker -->> content.js: js message: article html
+    content.js ->> lite.cnn article: dom access: inject image urls
+```
+
