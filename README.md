@@ -24,24 +24,34 @@ The extension should now appear in your list of installed extensions. You may ne
 
 ```mermaid
 sequenceDiagram
+    autonumber
     participant User
     participant LitePage as lite.cnn.com
-    participant ContentScript as content.js
-    participant BackgroundScript as background.js (service worker)
-    participant FullPage as www.cnn.com
+    participant CS as content.js
+    participant BG as background.js (service worker)
+    participant FP as www.cnn.com
 
+    %% User interaction
     User->>LitePage: Open CNN Lite article
-    LitePage->>ContentScript: Load content.js
-    ContentScript->>LitePage: Check for lite article content (dom internal)
+    
+    %% Content script loading and checking
+    LitePage->>CS: Load content.js
+    CS->>LitePage: Check for lite article content (dom internal)
+    
     alt Article not yet loaded
-        ContentScript->>LitePage: Observe page for article load (dom internal)
+        CS->>LitePage: Observe page for article load (dom internal)
     end
-    ContentScript->>ContentScript: Extract full CNN URL (dom internal)
-    ContentScript->>BackgroundScript: Send "fetchHTML" request with full URL (js message passing)
-    BackgroundScript->>FullPage: Fetch full article HTML (http request)
-    FullPage-->>BackgroundScript: Return full article HTML (http response)
-    BackgroundScript-->>ContentScript: Send full article HTML (js message passing)
-    ContentScript->>ContentScript: Parse HTML for image URLs (dom internal)
-    ContentScript->>LitePage: Inject images into lite article (dom internal)
-
+    
+    %% Content extraction and message passing
+    CS->>CS: Extract full CNN URL (dom internal)
+    CS->>BG: Send "fetchHTML" request with full URL (js message passing)
+    
+    %% Fetch full article HTML
+    BG->>FP: Fetch full article HTML (http request)
+    FP-->>BG: Return full article HTML (http response)
+    
+    %% Returning full article and parsing content
+    BG-->>CS: Send full article HTML (js message passing)
+    CS->>CS: Parse HTML for image URLs (dom internal)
+    CS->>LitePage: Inject images into lite article (dom internal)
 ```
